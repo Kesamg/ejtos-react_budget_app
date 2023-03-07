@@ -2,14 +2,14 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext';
 
 const AllocationForm = (props) => {
-    const { dispatch,remaining  } = useContext(AppContext);
+    const { dispatch,remaining,currency  } = useContext(AppContext);
 
     const [name, setName] = useState('');
     const [cost, setCost] = useState('');
     const [action, setAction] = useState('');
 
     const submitEvent = () => {
-
+            //The value should not exceed the remaining budget
             if(cost > remaining) {
                 alert("The value cannot exceed remaining funds  £"+remaining);
                 setCost("");
@@ -59,12 +59,23 @@ const AllocationForm = (props) => {
                 <option value="Reduce" name="Reduce">Reduce</option>
                   </select>
 
+                  <div style={{display:"flex",alignItems:"center"}}>
+                        <label for="cost" style={{ marginLeft: '1rem'}}>
+                        {currency}
+                        </label>
+                    </div>
                     <input
                         required='required'
                         type='number'
                         id='cost'
                         value={cost}
                         style={{ marginLeft: '2rem' , size: 10}}
+                        //Simple Validation to only accept number value 
+                        onKeyPress={(event) => {
+                            if (!/[0-9]/.test(event.key)) {
+                            event.preventDefault();
+                            }
+                        }}
                         onChange={(event) => setCost(event.target.value)}>
                         </input>
 
